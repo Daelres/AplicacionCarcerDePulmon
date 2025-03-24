@@ -7,7 +7,7 @@ st.set_page_config(page_title="Asistente de Detección de Cáncer de Pulmón", l
 
 # Título, autor e instrucciones
 st.title("Asistente de Detección de Cáncer de Pulmón")
-st.markdown("#### Autor: Daniel Restrepo")
+st.markdown("#### Autor: Daniel Restrepo - David Chia")
 st.write("""
 Bienvenido a la aplicación de detección de cáncer de pulmón. 
 Utiliza los controles deslizantes de la pestaña **Datos de Entrada** para ingresar la edad (entre 30 y 90 años) y la cantidad de cigarrillos consumidos por día (entre 0 y 40). 
