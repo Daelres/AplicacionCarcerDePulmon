@@ -33,11 +33,11 @@ with tab1:
     if st.button("Predecir"):
         try:
             # Cargar el modelo de persistencia de datos (por ejemplo, un preprocesador)
-            preprocesador = joblib.load("data_lung_cancer.pkl")
+            preprocesador = joblib.load("Recursos\Modelos\data_lung_cancer.pkl")
             datos_procesados = preprocesador.transform(datos_entrada)
 
             # Cargar el modelo predictivo
-            modelo = joblib.load("decision_tree_model.pkl")
+            modelo = joblib.load("Recursos\Modelos\decision_tree_model.pkl")
             prediccion = modelo.predict(datos_procesados)
 
             # Almacenar la predicción en el estado de la sesión para compartirla entre pestañas
