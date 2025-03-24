@@ -7,14 +7,11 @@ st.set_page_config(page_title="Asistente de Detección de Cáncer de Pulmón", l
 
 # Título, autor e instrucciones
 st.title("Asistente de Detección de Cáncer de Pulmón")
-st.markdown("#### Autor: Daniel Restrepo - David Chia")
+st.markdown("#### Autores: Daniel Restrepo - David Chia")
 st.write("""
 Bienvenido a la aplicación de detección de cáncer de pulmón.
 
-Por favor, llena todos los campos en la pestaña **Datos de Entrada**:
-- **Género (m/f)**  
-- **Edad (30 a 90)**  
-- **Resto de variables (selecciona 2 para 'Sí' y 1 para 'No')**  
+Diligencia el formulario que se presenta a continuación para realizar la predicción basados en la información presentada   
 
 Luego, presiona el botón **Predecir** para determinar si existe probabilidad de cáncer de pulmón.
 La predicción se mostrará en la pestaña **Resultado**.
@@ -27,12 +24,10 @@ with tab1:
     st.header("Ingreso de Datos")
 
     # 1. Género
-    gender = st.radio("Seleccione su género:", options=["m", "f"], index=0)
+    gender = st.radio("Seleccione su género:", options=["Masculino", "Femenino"], index=0)
 
     # 2. Edad
-    age = st.slider("Edad", min_value=30, max_value=90, step=1, value=30)
-
-    st.write("Responde con **2** para 'Sí' y **1** para 'No' en las siguientes preguntas:")
+    age = st.slider("Edad", min_value=0, max_value=100, step=1, value=30)
 
     # 3. SMOKING
     smoking = st.radio("¿Fuma habitualmente?", options=[1, 2], format_func=lambda x: "No" if x == 1 else "Sí", index=0)
@@ -92,8 +87,8 @@ with tab1:
                 'ANXIETY': [anxiety],
                 'PEER_PRESSURE': [peer_pressure],
                 'CHRONIC DISEASE': [chronic_disease],
-                'FATIGUE ': [fatigue],          # Nota: espacio al final
-                'ALLERGY ': [allergy],          # Nota: espacio al final
+                'FATIGUE ': [fatigue],        
+                'ALLERGY ': [allergy],       
                 'WHEEZING': [wheezing],
                 'ALCOHOL CONSUMING': [alcohol_consuming],
                 'COUGHING': [coughing],
@@ -105,9 +100,8 @@ with tab1:
             # Cargar el modelo predictivo
             modelo = joblib.load("Recursos/Modelos/decision_tree_model.pkl")
             prediccion = modelo.predict(datos_entrada)
-            # Se obtiene la predicción, que puede ser "YES" o "NO"
+            # Se obtiene la predicción, que puede ser Si ("YES") o No ("NO")
             resultado_pred = prediccion[0]
-            # Mapear la predicción a un valor numérico si se requiere, o simplemente usar la cadena
             if isinstance(resultado_pred, str):
                 resultado_pred = 1 if resultado_pred.upper() == "YES" else 0
 
@@ -123,9 +117,9 @@ with tab2:
         resultado = st.session_state["prediccion"]
         if resultado == 0:
             st.write("El paciente **NO** presenta indicios de cáncer de pulmón.")
-            st.image("https://source.unsplash.com/640x480/?healthy,lungs", caption="Pulmones saludables")
+            st.image("Recursos/Imagenes/OIVUU2E3UNFDFE23NO253KDOA4.jpg", caption="Pulmones saludables")
         else:
             st.write("El paciente **PRESENTA** indicios de cáncer de pulmón. Se recomienda consultar a un especialista.")
-            st.image("https://source.unsplash.com/640x480/?lung,cancer", caption="Posible cáncer de pulmón detectado")
+            st.image("Recursos/Imagenes/pulmones-humanos-afectados-órganos-internos-del-elemento-de-diseño-humano-ilustración-vectorial-los-enfermos-193328046.jpg", caption="Posible cáncer de pulmón detectado")
     else:
         st.info("Aún no se ha realizado ninguna predicción. Ingresa los datos en la pestaña **Datos de Entrada** y presiona **Predecir**.")
