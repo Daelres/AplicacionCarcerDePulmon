@@ -105,9 +105,14 @@ with tab1:
             # Cargar el modelo predictivo
             modelo = joblib.load("Recursos/Modelos/decision_tree_model.pkl")
             prediccion = modelo.predict(datos_entrada)
+            # Se obtiene la predicción, que puede ser "YES" o "NO"
+            resultado_pred = prediccion[0]
+            # Mapear la predicción a un valor numérico si se requiere, o simplemente usar la cadena
+            if isinstance(resultado_pred, str):
+                resultado_pred = 1 if resultado_pred.upper() == "YES" else 0
 
             # Almacenar la predicción en el estado de la sesión para compartirla entre pestañas
-            st.session_state["prediccion"] = int(prediccion[0])
+            st.session_state["prediccion"] = resultado_pred
             st.success("¡Predicción realizada exitosamente!")
         except Exception as e:
             st.error(f"Error al cargar el modelo o realizar la predicción: {e}")
