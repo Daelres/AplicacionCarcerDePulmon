@@ -1,5 +1,9 @@
-﻿streamlit
-pandas
-numpy
-scikit-learn
-joblib
+﻿fastapi~=0.115.12
+uvicorn[standard]
+pandas~=2.2.3
+scikit-learn~=1.6.1
+joblib~=1.4.2
+seaborn~=0.13.2
+matplotlib~=3.10.1
+streamlit~=1.45.1
+pydantic~=2.11.4
