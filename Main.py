@@ -1,40 +1,70 @@
 ﻿from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import joblib
 import pandas as pd
+import joblib
 
 app = FastAPI(
     title="API de Detección de Cáncer de Pulmón",
     version="1.0"
 )
 
-# Defino el esquema de entrada
 class InputData(BaseModel):
     GENDER: int = Field(..., ge=0, le=1, description="1=M, 0=F")
-    AGE: float = Field(..., description="Edad normalizada entre 30 y 90")
-    SMOKING: int; YELLOW_FINGERS: int; ANXIETY: int; PEER_PRESSURE: int
-    CHRONIC_DISEASE: int; FATIGUE_: int; ALLERGY_: int
-    WHEEZING: int; ALCOHOL_CONSUMING: int; COUGHING: int
-    SHORTNESS_OF_BREATH: int; SWALLOWING_DIFFICULTY: int; CHEST_PAIN: int
+    AGE: int = Field(..., ge=30, le=90, description="Edad en años (30-90)")
+    SMOKING: int
+    YELLOW_FINGERS: int
+    ANXIETY: int
+    PEER_PRESSURE: int
+    CHRONIC_DISEASE: int = Field(..., alias="CHRONIC DISEASE")
+    FATIGUE_: int = Field(..., alias="FATIGUE ")
+    ALLERGY_: int = Field(..., alias="ALLERGY ")
+    WHEEZING: int
+    ALCOHOL_CONSUMING: int = Field(..., alias="ALCOHOL CONSUMING")
+    COUGHING: int
+    SHORTNESS_OF_BREATH: int = Field(..., alias="SHORTNESS OF BREATH")
+    SWALLOWING_DIFFICULTY: int = Field(..., alias="SWALLOWING DIFFICULTY")
+    CHEST_PAIN: int = Field(..., alias="CHEST PAIN")
 
-# Cargo el modelo al arrancar
+    class Config:
+        allow_population_by_field_name = True
+        allow_population_by_alias = True
+
+# Cargo el modelo una sola vez
 try:
-    modelo = joblib.load("modelos/decision_tree_model.pkl")
+    modelo = joblib.load("Recursos/Modelos/decision_tree_model.pkl")
 except Exception as e:
     raise RuntimeError(f"No se pudo cargar el modelo: {e}")
 
 @app.post("/predict")
-def predict(data: InputData):
-    # Convierto a DataFrame
-    df = pd.DataFrame([data.dict()])
+def predict(input_data: InputData):
+    # Normalizar la edad con la fórmula definida
+    raw_age = input_data.AGE
+    normalized_age = (raw_age - 30) / (90 - 30)
+
+    # Construir payload usando alias, reemplazando AGE por el valor normalizado
+    payload = input_data.dict(by_alias=True)
+    payload["AGE"] = normalized_age
+
+    df = pd.DataFrame([payload])
+
+    # chequeo rápido de columnas
+    expected = list(modelo.feature_names_in_)
+    missing = set(expected) - set(df.columns)
+    extra   = set(df.columns) - set(expected)
+    if missing or extra:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "missing_columns": sorted(missing),
+                "extra_columns": sorted(extra),
+            }
+        )
+
+    # predicción
     try:
         pred = modelo.predict(df)[0]
+        if isinstance(pred, str):
+            pred = 1 if pred.upper() == "YES" else 0
+        return {"prediction": int(pred)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en predicción: {e}")
-    # Si el modelo devuelve strings, opcionalmente mapear a 0/1
-    if isinstance(pred, str):
-        pred = 1 if pred.upper() == "YES" else 0
-    return {"prediction": int(pred)}
-
-# Para levantar el servidor:
-# uvicorn main:app --host 0.0.0.0 --port 8000 --reload
