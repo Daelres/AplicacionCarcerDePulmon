@@ -129,3 +129,8 @@ Se envía una solicitud de prueba a uno de los endpoints para comprobar la respu
 ![Imagen de WhatsApp 2025-05-28 a las 21 48 05_3104e65d](https://github.com/user-attachments/assets/00eafa8b-ef3d-4433-8dd4-73ffe4ef5bf4)
 
 
+# **Link del repositorio de la app realizada en kotlin para movil**
+
+https://github.com/Daelres/CancerDePulmon.git
+
+
