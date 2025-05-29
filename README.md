@@ -1,4 +1,4 @@
-Aplicación de Detección de Cáncer de Pulmón
+##Aplicación de Detección de Cáncer de Pulmón
 Este proyecto consiste en una aplicación desarrollada en Python que utiliza técnicas de aprendizaje automático para predecir la probabilidad de que un paciente tenga cáncer de pulmón, basándose en características clínicas y demográficas. La interfaz de usuario está construida con Streamlit, lo que permite una interacción sencilla y efectiva.
 
  Estructura del Proyecto
