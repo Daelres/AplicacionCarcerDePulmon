@@ -37,7 +37,7 @@ Se muestra el panel de configuración para la creación del droplet.
 ![Imagen de WhatsApp 2025-05-28 a las 21 06 40_10b16f40](https://github.com/user-attachments/assets/f222652a-3902-4ae7-966a-623de703679f)
 
 ##### 2. Seleccionar el sistema operativo y especificaciones del servidor
-Configuración de la distribución de Devian y los recursos asignados al droplet.
+Configuración de la distribución de Debian y los recursos asignados al droplet.
 ![Imagen de WhatsApp 2025-05-28 a las 21 06 53_83a98fbc](https://github.com/user-attachments/assets/ef657754-b5fd-4807-b5f6-cdffc2590e56)
 
 
